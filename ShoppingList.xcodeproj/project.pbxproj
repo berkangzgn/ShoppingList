@@ -14,6 +14,7 @@
 		04122A5227326A4F00586493 /* ShoppingList.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 04122A5027326A4F00586493 /* ShoppingList.xcdatamodeld */; };
 		04122A5427326A5200586493 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 04122A5327326A5200586493 /* Assets.xcassets */; };
 		04122A5727326A5200586493 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 04122A5527326A5200586493 /* LaunchScreen.storyboard */; };
+		04122A5F27326A7E00586493 /* VCDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04122A5E27326A7E00586493 /* VCDetails.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,7 @@
 		04122A5327326A5200586493 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		04122A5627326A5200586493 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		04122A5827326A5200586493 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		04122A5E27326A7E00586493 /* VCDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VCDetails.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -61,6 +63,7 @@
 				04122A4727326A4F00586493 /* AppDelegate.swift */,
 				04122A4927326A4F00586493 /* SceneDelegate.swift */,
 				04122A4B27326A4F00586493 /* ViewController.swift */,
+				04122A5E27326A7E00586493 /* VCDetails.swift */,
 				04122A4D27326A4F00586493 /* Main.storyboard */,
 				04122A5327326A5200586493 /* Assets.xcassets */,
 				04122A5527326A5200586493 /* LaunchScreen.storyboard */,
@@ -143,6 +146,7 @@
 			files = (
 				04122A4C27326A4F00586493 /* ViewController.swift in Sources */,
 				04122A5227326A4F00586493 /* ShoppingList.xcdatamodeld in Sources */,
+				04122A5F27326A7E00586493 /* VCDetails.swift in Sources */,
 				04122A4827326A4F00586493 /* AppDelegate.swift in Sources */,
 				04122A4A27326A4F00586493 /* SceneDelegate.swift in Sources */,
 			);
