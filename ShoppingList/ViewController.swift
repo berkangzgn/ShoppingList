@@ -17,6 +17,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     var nameArray = [String]()
     var idArray = [UUID]()
     
+    var selectedName = ""
+    var selectedUUID : UUID?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,7 +28,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         
         // Sağ üstteki ekleme butonu
         navigationController?.navigationBar.topItem?.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.add, target: self, action: #selector(addButtonClicked))
-        
+
         giveData()
     }
     
@@ -52,7 +54,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             // Any döndüğü için - try context.fetch - dönüştürdük.
             let sonuclar = try context.fetch(fetchRequest)
             
-            // sonuclar'ı ANy'den NSManagedObjectContext dönüşümünü yapıtoruz.
+            // sonuclar'ı Any'den NSManagedObjectContext dönüşümünü yapıtoruz.
             for sonuc in sonuclar as! [NSManagedObject]{
                     // Verdiğimiz anahtar kelime bize istediğimiz sonucu verecektir.
                 if let name = sonuc.value(forKey: "name") as? String {
@@ -62,30 +64,46 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                     idArray.append(id)
                 }
             }
-            
             // Verileri güncelledikten sonra tabloyu güncellemesi için
             tableView.reloadData()
-            
         } catch {
             print("hata var goççum")
         }
-        
     }
     
     
-    @objc func addButtonClicked(){
-     performSegue(withIdentifier: "toVCDetails", sender: nil)
+    @objc func addButtonClicked() {
+        selectedName = ""
+        performSegue(withIdentifier: "toVCDetails", sender: nil)
     }
     
     
+    // Kaç tane row olacak
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 10
     }
     
     
+    // Row içerisinde ne olacak
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell()
         cell.textLabel?.text = nameArray[indexPath.row]
         return cell
+    }
+    
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "toVCDetails" {
+            let destinationVC = segue.destination as! VCDetails
+            destinationVC.selectedProductName = selectedName
+            destinationVC.selectedProductUUID = selectedUUID
+        }
+    }
+    
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        selectedName = nameArray[indexPath.row]
+        selectedUUID = idArray[indexPath.row]
+        performSegue(withIdentifier: "toVCDetails", sender: nil)
     }
 }
