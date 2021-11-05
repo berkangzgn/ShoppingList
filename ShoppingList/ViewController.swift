@@ -10,7 +10,6 @@ import CoreData
 
 class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
-    
     @IBOutlet weak var tableView: UITableView!
     
     
@@ -26,14 +25,13 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         tableView.delegate = self
         tableView.dataSource = self
         
-        // Sağ üstteki ekleme butonu
+            // Sağ üstteki ekleme butonu
         navigationController?.navigationBar.topItem?.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.add, target: self, action: #selector(addButtonClicked))
-
         giveData()
     }
     
     
-    // Seelctor - dataAdded bildiirmi gelirse ne yapacağı
+        // Seelctor - dataAdded bildiirmi gelirse ne yapacağı
     override func viewWillAppear(_ animated: Bool) {
         NotificationCenter.default.addObserver(self, selector: #selector(giveData), name: NSNotification.Name(rawValue: "dataAdded"), object: nil)
     }
@@ -44,28 +42,29 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         nameArray.removeAll(keepingCapacity: false)
         idArray.removeAll(keepingCapacity: false)
         
-        // DB bağlanma
+            // DB bağlanma
         let context = (UIApplication.shared.delegate as? AppDelegate)!.persistentContainer.viewContext
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "ShoppingList")
-        // Çok büyük verileri çekerken cashing mekanizmasından faydalanmaya yarar
+            // Çok büyük verileri çekerken cashing mekanizmasından faydalanmaya yarar
         fetchRequest.returnsObjectsAsFaults = false
         
         do {
-            // Any döndüğü için - try context.fetch - dönüştürdük.
+                // Any döndüğü için - try context.fetch - dönüştürdük.
             let sonuclar = try context.fetch(fetchRequest)
-            
-            // sonuclar'ı Any'den NSManagedObjectContext dönüşümünü yapıtoruz.
-            for sonuc in sonuclar as! [NSManagedObject]{
-                    // Verdiğimiz anahtar kelime bize istediğimiz sonucu verecektir.
-                if let name = sonuc.value(forKey: "name") as? String {
-                    nameArray.append(name)
+            if sonuclar.count > 0 {
+                    // sonuclar'ı Any'den NSManagedObjectContext dönüşümünü yapıtoruz.
+                for sonuc in sonuclar as! [NSManagedObject]{
+                        // Verdiğimiz anahtar kelime bize istediğimiz sonucu verecektir.
+                    if let name = sonuc.value(forKey: "name") as? String {
+                        nameArray.append(name)
+                    }
+                    if let id = sonuc.value(forKey: "id") as? UUID {
+                        idArray.append(id)
+                    }
                 }
-                if let id = sonuc.value(forKey: "id") as? UUID {
-                    idArray.append(id)
-                }
+                    // Verileri güncelledikten sonra tabloyu güncellemesi için
+                tableView.reloadData()
             }
-            // Verileri güncelledikten sonra tabloyu güncellemesi için
-            tableView.reloadData()
         } catch {
             print("hata var goççum")
         }
@@ -78,13 +77,13 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     
     
-    // Kaç tane row olacak
+        // Kaç tane row olacak
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 10
     }
     
     
-    // Row içerisinde ne olacak
+        // Row içerisinde ne olacak
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell()
         cell.textLabel?.text = nameArray[indexPath.row]
@@ -92,6 +91,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     
     
+        // Seçilen ürünü details sayfasına gönderirken kullandığımız kodlar
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "toVCDetails" {
             let destinationVC = segue.destination as! VCDetails
@@ -99,8 +99,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             destinationVC.selectedProductUUID = selectedUUID
         }
     }
-    
-    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         selectedName = nameArray[indexPath.row]
         selectedUUID = idArray[indexPath.row]

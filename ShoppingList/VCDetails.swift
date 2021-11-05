@@ -24,8 +24,44 @@ class VCDetails: UIViewController, UIImagePickerControllerDelegate, UINavigation
             // Seçilen ürünün bilgileri çekilip gösterildiği yer
         if selectedProductName != "" {
                     // UUID optional olarak göstermemek için böyle yaptık.
-            if let uuidString = selectedProductUUID {
-                print(uuidString)
+            if let uuidString = selectedProductUUID?.uuidString {
+                    // Bağlantı ayarlarını buradda yapıyoruz.
+                // let appDelegate = UIApplication.shared.delegate as! AppDelegate
+                let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+                
+                let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "ShoppingList")
+                    // Prdeicate - mantıksal sınırlar koymak ve aramayı bu snınırlara göre yapabilmeye yarar
+                // Format- Neyi filtreleyeyim?
+                // Args- Neye göre filtreleyeyim?
+                    // id = %@ - uuidString'e eşit olanlara göre filtrele
+                fetchRequest.predicate = NSPredicate(format: "id = %@", uuidString)
+                fetchRequest.returnsObjectsAsFaults = false
+                
+                do {
+                    let conclusions = try context.fetch(fetchRequest)
+                    if conclusions.count > 0 {
+                            // for-loop yapmak yerine for'un 0'ını da alabiliriz.
+                        for conclusion in conclusions as! [NSManagedObject] {
+                            if let name = conclusion.value(forKey: "name") as? String {
+                                productName.text = name
+                            }
+                            if let fiyat = conclusion.value(forKey: "price") as? Int {
+                                price.text = String(fiyat)
+                            }
+                            if let marka = conclusion.value(forKey: "brand") as? String {
+                                brand.text = marka
+                            }
+                            if let imageData = conclusion.value(forKey: "product") as? Data {
+                                    // UIImage çevirme işlemi
+                                let image = UIImage(data: imageData)
+                                productView.image = image
+                            }
+                        }
+                    }
+                } catch {
+                    print("Program has a error !!")
+                }
+                
             }
         } else {
             productName.text = ""
