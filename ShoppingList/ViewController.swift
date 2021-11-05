@@ -104,4 +104,47 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         selectedUUID = idArray[indexPath.row]
         performSegue(withIdentifier: "toVCDetails", sender: nil)
     }
+    
+    
+        // Veriyi DB ve listeden silme işlemi
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+            
+            let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "ShoppingList")
+            let uuidString = idArray[indexPath.row].uuidString
+            
+                // id'ye göre filtreleme yapıyoruz
+            fetchRequest.predicate = NSPredicate(format: "id = %@", uuidString)
+            fetchRequest.returnsObjectsAsFaults = false
+            
+            do {
+                let conclusions = try context.fetch(fetchRequest)
+                if conclusions.count > 0 {
+                    for conclusion in conclusions as! [NSManagedObject] {
+                        if let id = conclusion.value(forKey: "id") as? UUID {
+                                // Seçilen id istenilen id mi onu kontrol ediyoruz.
+                            if id == idArray[indexPath.row]{
+                                context.delete(conclusion)
+                                nameArray.remove(at: indexPath.row)
+                                idArray.remove(at: indexPath.row)
+                                
+                                    // Ana tableView değişkenine ulaşıp onu güncellemesini istiyoruz
+                                self.tableView.reloadData()
+                                
+                                do {
+                                    try context.save()
+                                } catch {
+                                    print("x")
+                                }
+                                break
+                            }
+                        }
+                    }
+                }
+            } catch {
+                print("Program has a error !!")
+            }
+        }
+    }
 }
