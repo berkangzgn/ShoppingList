@@ -14,6 +14,7 @@ class VCDetails: UIViewController, UIImagePickerControllerDelegate, UINavigation
     @IBOutlet weak var productName: UITextField!
     @IBOutlet weak var price: UITextField!
     @IBOutlet weak var brand: UITextField!
+    @IBOutlet weak var saveButton: UIButton!
     
     var selectedProductName = ""
     var selectedProductUUID : UUID?
@@ -23,6 +24,9 @@ class VCDetails: UIViewController, UIImagePickerControllerDelegate, UINavigation
         
             // Seçilen ürünün bilgileri çekilip gösterildiği yer
         if selectedProductName != "" {
+                // Kullanıcı henüz bir bilgi girmemişken butonuz kullanıcıdan gizliyoruz.
+            saveButton.isHidden = true
+            
                     // UUID optional olarak göstermemek için böyle yaptık.
             if let uuidString = selectedProductUUID?.uuidString {
                     // Bağlantı ayarlarını buradda yapıyoruz.
@@ -64,6 +68,8 @@ class VCDetails: UIViewController, UIImagePickerControllerDelegate, UINavigation
                 
             }
         } else {
+            saveButton.isHidden = false
+            saveButton.isEnabled = false
             productName.text = ""
             price.text = ""
             brand.text = ""            
@@ -103,6 +109,7 @@ class VCDetails: UIViewController, UIImagePickerControllerDelegate, UINavigation
         // Resmi seçtikten sonra ekleme ekranına seçilen resmi ekleme
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         productView.image = info[.originalImage] as? UIImage
+        saveButton.isEnabled = true 
             // pickerController kapatmak için
         self.dismiss(animated: true, completion: nil)
     }

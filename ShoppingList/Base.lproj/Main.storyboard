@@ -114,6 +114,7 @@
                         <outlet property="price" destination="qRl-D1-Kzm" id="7nu-6H-up9"/>
                         <outlet property="productName" destination="vGh-Hz-gAG" id="j9T-M4-0fH"/>
                         <outlet property="productView" destination="RBe-DK-AZR" id="722-r1-aIO"/>
+                        <outlet property="saveButton" destination="Wuo-mj-XJa" id="YXm-eX-Tr2"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ciN-0L-Az1" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
